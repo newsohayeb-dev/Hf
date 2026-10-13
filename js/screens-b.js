@@ -26,55 +26,19 @@
     ])]);
   }
 
-  /* 4. الرئيسية */
+  /* 4. الرئيسية: التحية فقط */
   App.register('/home', function () {
     var name = Store.get('name');
     var level = Content.levelTitle(Store.get('levelId'));
     var stream = Content.streamTitle(Store.get('streamId'));
-
-    var last = Content.lesson(Store.get('lastLessonId'));
-    var resume = h('div', { class: 'resume-card' }, [
-      h('h2', { text: 'كمّل منين وقفتي' }),
-      last
-        ? h('a', { class: 'row', href: '#/lesson?id=' + encodeURIComponent(last.id) }, [
-            h('span', { class: 'row-ico' }, [UI.icon('book')]),
-            h('span', { class: 'row-body' }, [h('p', { class: 'row-title', text: last.title || '' })]),
-            h('span', { class: 'row-end' }, [UI.icon('forward')])
-          ])
-        : UI.emptyState('ماكاينش درس بدأتي فيه دابا', 'غادي يبان هنا آخر درس وقفتي فيه.', 'book')
-    ]);
-
-    /* راجع اليوم: الدروس التي فيها بطاقات علّمها المستخدم بـ"خاصني نراجعها" أو "ما حفظتهاش" */
-    var status = Store.get('cardStatus') || {};
-    var dueIds = {};
-    Object.keys(status).forEach(function (k) {
-      if (status[k] === 'again' || status[k] === 'review') dueIds[k.split('::')[0]] = true;
-    });
-    var due = Content.lessons().filter(function (l) { return dueIds[l.id]; });
-    var dueBlock = due.length
-      ? h('ul', { class: 'rows' }, due.map(function (l, i) { return lessonRow(l, i); }))
-      : UI.emptyState('ماكاينش حاجة للمراجعة اليوم');
-
-    var mine = Content.subjects();
-    var lid = Store.get('levelId'), sid = Store.get('streamId');
-    var filtered = mine.filter(function (s) { return (!s.levelId || s.levelId === lid) && (!s.streamId || s.streamId === sid); });
-    var mineBlock = filtered.length
-      ? h('ul', { class: 'rows' }, filtered.map(subjectRow))
-      : UI.emptyState('ماكاينش مواد دابا');
-
     return {
       title: 'الرئيسية', header: false, nav: 'home',
-      content: h('div', null, [
-        h('div', { class: 'greet' }, [
-          h('div', null, [
-            h('h1', { text: name ? 'مرحباً بك، ' + name : 'مرحباً بك' }),
-            (level || stream) ? h('p', { text: [level, stream].filter(Boolean).join(' · ') }) : null
-          ]),
-          h('span', { class: 'avatar' }, [UI.icon('user')])
+      content: h('div', { class: 'greet' }, [
+        h('div', null, [
+          h('h1', { text: name ? 'مرحباً بك، ' + name : 'مرحباً بك' }),
+          (level || stream) ? h('p', { text: [level, stream].filter(Boolean).join(' · ') }) : null
         ]),
-        h('div', { class: 'section' }, [resume]),
-        UI.section('راجع اليوم', dueBlock),
-        UI.section('المواد ديالي', mineBlock)
+        h('span', { class: 'avatar' }, [UI.icon('user')])
       ])
     };
   });
