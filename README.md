@@ -46,7 +46,7 @@ python3 -m http.server 8000
 
 - **levels / streams** (اختياري): قائمة `{ "id": "...", "title": "..." }`. إذا بقيتا فارغتين يستعمل التطبيق الخيارات الافتراضية الموجودة في `js/config.js`.
 - **subjects**: `{ "id": "math", "title": "اسم المادة", "levelId": "bac1", "streamId": "physics" }`
-  (`levelId` و`streamId` اختياريان؛ تُستعملان لتصفية "المواد ديالي" في الرئيسية).
+  (`levelId` و`streamId` اختياريان.)
 - **lessons**: كل درس مرتبط بمادة عبر `subjectId`:
 
 ```json
